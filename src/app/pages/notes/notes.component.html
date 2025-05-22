@@ -1,0 +1,80 @@
+<main>
+  <nav class="my-5">
+    <div class="container d-flex justify-content-between align-items-center">
+      <h2 class="h5 m-0 fw-bold"><i class="bi bi-stars"></i> All of tasks</h2>
+      <ul class="list-unstyled d-flex gap-3 m-0">
+        <ul class="layout rounded-2 d-flex list-unstyled">
+          <li class="rounded-3">
+            <i class="fa-solid fa-grip-vertical" id="gridBtn"></i>
+          </li>
+          <li class="rounded-3">
+            <i class="fa-solid fa-bars" id="barsBtn"></i>
+          </li>
+        </ul>
+      </ul>
+    </div>
+  </nav>
+
+  <button
+    id="newTask"
+    class="btn btn-new-task mx-auto d-flex align-items-center mb-5 fw-semibold"
+    (click)="openModal()"
+  >
+    <i class="bi bi-file-earmark-plus me-1 fs-5"></i> Add New Task
+  </button>
+
+  <div class="container columns pb-5">
+    <div class="row g-3 align-items-start">
+      <section class="to-do col-md-6 col-lg-4" id="nextUp">
+        <div class="content">
+          <div
+            class="header d-flex justify-content-between align-items-center py-2 px-3"
+          >
+            <h2 class="m-0 text-capitalize">Next up</h2>
+            <span id="nextUpCounter">0</span>
+          </div>
+          <div class="tasks p-3"></div>
+        </div>
+      </section>
+
+      <section class="in-progress col-md-6 col-lg-4" id="inProgress">
+        <div class="content">
+          <div
+            class="header d-flex justify-content-between align-items-center py-2 px-3"
+          >
+            <h2 class="m-0 text-capitalize">In Progress</h2>
+            <span id="inProgressCounter">0</span>
+          </div>
+          <div class="tasks p-3"></div>
+        </div>
+      </section>
+
+      <section class="done col-md-6 col-lg-4" id="done">
+        <div class="content">
+          <div
+            class="header d-flex justify-content-between align-items-center py-2 px-3"
+          >
+            <h2 class="m-0 text-capitalize">Done</h2>
+            <span id="doneCounter">0</span>
+          </div>
+          <div class="tasks p-3">
+            <!-- ================== -->
+            <div class="task">
+              <h3 class="text-capitalize">Programming</h3>
+              <p class="description text-capitalize">JS</p>
+              <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
+                <li><i class="fa-regular fa-pen-to-square"></i></li>
+                <li><i class="fa-solid fa-trash-can"></i></li>
+                <li><i class="fa-solid fa-palette"></i></li>
+              </ul>
+            </div>
+            <!-- ================== -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<app-modal [isVisible]="modalVisible()" (onClose)="closeModal()"></app-modal>

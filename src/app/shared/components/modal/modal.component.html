@@ -1,0 +1,62 @@
+@if (isVisible) {
+<div
+  class="my-modal bg-black bg-opacity-75 position-absolute start-0 top-0 end-0 bottom-0 d-flex justify-content-center align-items-center"
+  id="modal"
+  (click)="handleOverlayClick()"
+>
+  <div class="container" (click)="$event.stopPropagation()">
+    <div class="form-floating">
+      <select
+        class="form-select mb-3"
+        id="status"
+        aria-label="Floating label select example"
+      >
+        <option value="nextUp" selected>Next Up</option>
+        <option value="inProgress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+      <label for="status">Select Task Status</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        placeholder="Task Title"
+      />
+      <label for="title">Task Title</label>
+    </div>
+
+    <p class="alert alert-danger d-none">
+      Task Title must be at least 3 characters & not ending with a space
+    </p>
+
+    <div class="form-floating mb-3">
+      <textarea
+        class="form-control"
+        id="description"
+        placeholder="Task Description"
+      ></textarea>
+      <label for="description">Task Description</label>
+    </div>
+
+    <p class="alert alert-danger d-none">
+      Description must contain between 5 and 100 characters
+    </p>
+
+    <p class="text-end">
+      <span id="remainingCounter">100</span> remaining character
+    </p>
+
+    <button class="btn d-block btn-new-task w-100 fw-semibold" id="addBtn">
+      Add Task
+    </button>
+
+    <button class="btn d-none btn-primary w-100 fw-semibold" id="updateBtn">
+      Update Task
+    </button>
+  </div>
+</div>
+
+}

@@ -1,0 +1,15 @@
+header {
+  background-color: var(--sec-black);
+}
+
+header h1 {
+  font-family: "Lobster", cursive;
+  cursor: pointer;
+}
+header h1 a {
+  color: inherit;
+}
+
+header h1 a:hover {
+  color: inherit;
+}
