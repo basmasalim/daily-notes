@@ -31,9 +31,36 @@
             class="header d-flex justify-content-between align-items-center py-2 px-3"
           >
             <h2 class="m-0 text-capitalize">Next up</h2>
+            @if (notes.length > 0) {
             <span id="nextUpCounter">0</span>
+            }
           </div>
-          <div class="tasks p-3"></div>
+          <div
+            class="tasks p-3"
+            cdkDropList
+            #todoList1="cdkDropList"
+            [cdkDropListData]="notes"
+            [cdkDropListConnectedTo]="[todoList2, todoList3]"
+            (cdkDropListDropped)="drop($event)"
+          >
+            @for (item of notes(); track $index) {
+            <div class="task">
+              <h3 class="text-capitalize" cdkDrag>{{ item.title }}</h3>
+              <p class="description text-capitalize" cdkDrag>
+                {{ item.description }}
+              </p>
+              <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
+                <li (click)="editNotes($index, item)">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </li>
+                <li (click)="deleteNotes($index)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </li>
+                <li><i class="fa-solid fa-palette"></i></li>
+              </ul>
+            </div>
+            }
+          </div>
         </div>
       </section>
 
@@ -43,9 +70,36 @@
             class="header d-flex justify-content-between align-items-center py-2 px-3"
           >
             <h2 class="m-0 text-capitalize">In Progress</h2>
+            @if (notes.length > 0) {
             <span id="inProgressCounter">0</span>
+            }
           </div>
-          <div class="tasks p-3"></div>
+          <div class="tasks p-3">
+            <div
+              class="task"
+              cdkDropList
+              #todoList2="cdkDropList"
+              [cdkDropListData]="inProgress"
+              [cdkDropListConnectedTo]="[todoList1, todoList3]"
+              (cdkDropListDropped)="drop($event)"
+            >
+              @for (item of inProgress(); track $index) {
+              <h3 class="text-capitalize" cdkDrag>{{ item.title }}</h3>
+              <p class="description text-capitalize" cdkDrag>
+                {{ item.description }}
+              </p>
+              <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
+                <li (click)="editNotes($index, item)">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </li>
+                <li (click)="deleteNotes($index)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </li>
+                <li><i class="fa-solid fa-palette"></i></li>
+              </ul>
+              }
+            </div>
+          </div>
         </div>
       </section>
 
@@ -55,20 +109,35 @@
             class="header d-flex justify-content-between align-items-center py-2 px-3"
           >
             <h2 class="m-0 text-capitalize">Done</h2>
+            @if (notes.length > 0) {
             <span id="doneCounter">0</span>
+            }
           </div>
           <div class="tasks p-3">
-            <!-- ================== -->
-            <div class="task">
-              <h3 class="text-capitalize">Programming</h3>
-              <p class="description text-capitalize">JS</p>
+            <div
+              class="task"
+              cdkDropList
+              #todoList3="cdkDropList"
+              [cdkDropListData]="done"
+              [cdkDropListConnectedTo]="[todoList1, todoList2]"
+              (cdkDropListDropped)="drop($event)"
+            >
+              @for (item of done(); track $index) {
+              <h3 class="text-capitalize" cdkDrag>{{ item.title }}</h3>
+              <p class="description text-capitalize" cdkDrag>
+                {{ item.description }}
+              </p>
               <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li><i class="fa-regular fa-pen-to-square"></i></li>
-                <li><i class="fa-solid fa-trash-can"></i></li>
+                <li (click)="editNotes($index, item)">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </li>
+                <li (click)="deleteNotes($index)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </li>
                 <li><i class="fa-solid fa-palette"></i></li>
               </ul>
+              }
             </div>
-            <!-- ================== -->
           </div>
         </div>
       </section>

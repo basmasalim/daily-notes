@@ -5,57 +5,60 @@
   (click)="handleOverlayClick()"
 >
   <div class="container" (click)="$event.stopPropagation()">
-    <div class="form-floating">
-      <select
-        class="form-select mb-3"
-        id="status"
-        aria-label="Floating label select example"
+    <form [formGroup]="modalForm">
+      @let titleForm = modalForm.get('title');
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          placeholder="Note Title"
+          formControlName="title"
+        />
+        <label for="title">Note Title</label>
+      </div>
+      @if (titleForm?.errors && titleForm?.touched) {
+      <p class="alert alert-danger d-none">
+        Note Title must be at least 3 characters & not ending with a space
+      </p>
+      }
+
+      <div class="form-floating mb-3">
+        <textarea
+          class="form-control"
+          id="description"
+          placeholder="Note Description"
+        ></textarea>
+        <label for="description">Note Description</label>
+      </div>
+
+      <p class="alert alert-danger d-none">
+        Description must contain between 5 and 100 characters
+      </p>
+
+      <p class="text-end">
+        <span id="remainingCounter">100</span> remaining character
+      </p>
+      @if (!isEditEnabled()) {
+      <button
+        [disabled]="modalForm.invalid"
+        class="btn d-block btn-new-Note w-100 fw-semibold"
+        id="addBtn"
+        (click)="addNote()"
       >
-        <option value="nextUp" selected>Next Up</option>
-        <option value="inProgress">In Progress</option>
-        <option value="done">Done</option>
-      </select>
-      <label for="status">Select Task Status</label>
-    </div>
-
-    <div class="form-floating mb-3">
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        placeholder="Task Title"
-      />
-      <label for="title">Task Title</label>
-    </div>
-
-    <p class="alert alert-danger d-none">
-      Task Title must be at least 3 characters & not ending with a space
-    </p>
-
-    <div class="form-floating mb-3">
-      <textarea
-        class="form-control"
-        id="description"
-        placeholder="Task Description"
-      ></textarea>
-      <label for="description">Task Description</label>
-    </div>
-
-    <p class="alert alert-danger d-none">
-      Description must contain between 5 and 100 characters
-    </p>
-
-    <p class="text-end">
-      <span id="remainingCounter">100</span> remaining character
-    </p>
-
-    <button class="btn d-block btn-new-task w-100 fw-semibold" id="addBtn">
-      Add Task
-    </button>
-
-    <button class="btn d-none btn-primary w-100 fw-semibold" id="updateBtn">
-      Update Task
-    </button>
+        Add Note
+      </button>
+      }@else {
+      <button
+        [disabled]="modalForm.invalid"
+        class="btn d-none btn-primary w-100 fw-semibold"
+        id="updateBtn"
+        (click)="updateNote()"
+      >
+        Update Note
+      </button>
+      }
+    </form>
   </div>
 </div>
 
