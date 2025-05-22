@@ -1,17 +1,23 @@
 <main>
   <nav class="my-5">
-    <div class="container d-flex justify-content-between align-items-center">
-      <h2 class="h5 m-0 fw-bold"><i class="bi bi-stars"></i> All of tasks</h2>
-      <ul class="list-unstyled d-flex gap-3 m-0">
-        <ul class="layout rounded-2 d-flex list-unstyled">
-          <li class="rounded-3">
-            <i class="fa-solid fa-grip-vertical" id="gridBtn"></i>
-          </li>
-          <li class="rounded-3">
-            <i class="fa-solid fa-bars" id="barsBtn"></i>
-          </li>
-        </ul>
-      </ul>
+    <div
+      class="container d-flex justify-content-between align-items-center flex-wrap gap-3"
+    >
+      <h2 class="h5 m-0 fw-bold fs-5 text-uppercase">✨ All of tasks</h2>
+      <div class="input-group">
+        <label class="input-group-text" id="addon-wrapping" for="searchInput"
+          >🩷</label
+        >
+        <input
+          type="text"
+          class="form-control w-50"
+          placeholder="Seach Tasks...."
+          aria-label="search"
+          aria-describedby="addon-wrapping"
+          id="searchInput"
+          list="categories"
+        />
+      </div>
     </div>
   </nav>
 
@@ -30,7 +36,7 @@
           <div
             class="header d-flex justify-content-between align-items-center py-2 px-3"
           >
-            <h2 class="m-0 text-capitalize">Next up</h2>
+            <h2 class="m-0 text-uppercase">Next up</h2>
             @if (notes.length > 0) {
             <span id="nextUpCounter">{{ notesCount }}</span>
             }

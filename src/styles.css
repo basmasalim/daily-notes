@@ -1,33 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
 :root {
-  --main-black: #0d1117;
-  --sec-black: #161b22;
-  --finance-color: #30a277;
-  --health-color: #fb882e;
-  --productivity-color: #fc3637;
-  --education-color: #2e4acd;
+  --main-black: #1c1c21;
+  --sec-black: #282c34;
+  --finance-color: #7b61ff;
+  --health-color: #f23fc5;
+  --productivity-color: #4194e6;
+  --education-color: #f23fc5;
   --mid-gray: #474a4e;
-  --gray-color: #dadada;
-  --text-color: #a5a6a7;
+  --gray-color: #d1d5db;
+  --text-color: #fff;
 }
 
 body {
   min-height: 100vh;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Lobster", cursive;
   background-color: var(--main-black);
   color: var(--text-color);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Noto Sans Syloti Nagri", sans-serif;
+a {
+  color: inherit;
 }
-
 /* & ========> Customization of Scrollbar */
 
 ::-webkit-scrollbar {
@@ -62,12 +56,20 @@ h6 {
 /* & ========> Global Rules */
 
 .btn-new-task {
-  --bs-btn-color: #222;
-  --bs-btn-bg: #ffcb42;
-  --bs-btn-border-color: #efbb37;
-  --bs-btn-hover-color: #222;
-  --bs-btn-hover-bg: #e0aa22;
-  --bs-btn-hover-border-color: #e0aa22;
+  color: #fff;
+  background: linear-gradient(90deg, #f23fc5, #9c4cc3, #4194e6);
+  border: none;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.btn-new-task:hover {
+  box-shadow: 0 6px 20px rgba(242, 63, 197, 0.5);
+  transform: translateY(-2px);
+  cursor: pointer;
 }
 
 .btn-update {
@@ -78,16 +80,6 @@ h6 {
   --bs-btn-hover-bg: #2899b2;
   --bs-btn-hover-border-color: #2899b2;
 }
-
-/* .btn-update:disabled,
-.btn-new-task:disabled {
-  --bs-btn-color: #808080;
-  --bs-btn-bg: #f0f0f0;
-  --bs-btn-border-color: #d9d9d9;
-  --bs-btn-hover-color: #808080;
-  --bs-btn-hover-bg: #f0f0f0;
-  --bs-btn-hover-border-color: #d9d9d9;
-} */
 
 .form-control.is-valid {
   background-image: url("/images/valid.png");
@@ -158,9 +150,14 @@ section .header {
   border-top-right-radius: inherit;
 }
 
+h1,
 section .header h2 {
   font-family: "Lobster", cursive;
   font-size: 20px;
+  font-size: 1.5rem;
+  background: linear-gradient(90deg, #f23fc5, #9c4cc3, #4194e6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 section .header span {
@@ -187,8 +184,16 @@ section .header span {
 
 section .tasks .task {
   padding: 15px;
-  border: 1px solid #2a2a2a;
+  background-color: #1e1e24;
+  border: 1px solid #3c3f4c;
   border-radius: 8px;
+  transition: transform 0.3s ease;
+  cursor: grab;
+}
+
+section .tasks .task:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(156, 76, 195, 0.3);
 }
 
 section .tasks .task:not(:last-child) {
@@ -207,19 +212,6 @@ section .task .category {
   border-radius: 5px;
   color: #f1f1f1;
   margin-bottom: 15px;
-}
-
-.category.education {
-  background-color: var(--education-color);
-}
-.category.health {
-  background-color: var(--health-color);
-}
-.category.finance {
-  background-color: var(--finance-color);
-}
-.category.productivity {
-  background-color: var(--productivity-color);
 }
 
 .task ul i {

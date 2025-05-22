@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import {
   CdkDragDrop,
@@ -38,6 +38,7 @@ export class NotesComponent implements OnInit {
         this.done = data.done || [];
       }
     }
+    this.syncState();
   }
 
   saveToLocalStorage() {
@@ -49,8 +50,6 @@ export class NotesComponent implements OnInit {
       }));
     }
   }
-
-
 
   addNewNote(note: NotesData) {
     note._id = Date.now();
@@ -86,6 +85,7 @@ export class NotesComponent implements OnInit {
     this.noteBeingEdited = { ...task, _id: taskId };
     this.showModal = true;
   }
+
   handleNoteUpdate(updatedNote: NotesData) {
     const lists = [this.notes, this.inProgress, this.done];
 
@@ -123,7 +123,7 @@ export class NotesComponent implements OnInit {
         event.currentIndex,
       );
     }
-    this.syncState()
+    this.syncState();
   }
   openModal() {
     this.showModal = true;
