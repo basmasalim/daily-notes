@@ -32,7 +32,7 @@
           >
             <h2 class="m-0 text-capitalize">Next up</h2>
             @if (notes.length > 0) {
-            <span id="nextUpCounter">0</span>
+            <span id="nextUpCounter">{{ notesCount }}</span>
             }
           </div>
           <div
@@ -43,17 +43,17 @@
             [cdkDropListConnectedTo]="[todoList2, todoList3]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of notes(); track $index) {
-            <div class="task">
-              <h3 class="text-capitalize" cdkDrag>{{ item.title }}</h3>
-              <p class="description text-capitalize" cdkDrag>
+            @for (item of notes; track $index) {
+            <div class="task" cdkDrag>
+              <h3 class="text-capitalize">{{ item.title }}</h3>
+              <p class="description text-capitalize">
                 {{ item.description }}
               </p>
               <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
                 <li (click)="editNotes($index, item)">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </li>
-                <li (click)="deleteNotes($index)">
+                <li (click)="deleteNotes($index, 'notes')">
                   <i class="fa-solid fa-trash-can"></i>
                 </li>
                 <li><i class="fa-solid fa-palette"></i></li>
@@ -71,34 +71,32 @@
           >
             <h2 class="m-0 text-capitalize">In Progress</h2>
             @if (notes.length > 0) {
-            <span id="inProgressCounter">0</span>
+            <span id="inProgressCounter">{{ inProgressCount }}</span>
             }
           </div>
-          <div class="tasks p-3">
-            <div
-              class="task"
-              cdkDropList
-              #todoList2="cdkDropList"
-              [cdkDropListData]="inProgress"
-              [cdkDropListConnectedTo]="[todoList1, todoList3]"
-              (cdkDropListDropped)="drop($event)"
-            >
-              @for (item of inProgress(); track $index) {
-              <h3 class="text-capitalize" cdkDrag>{{ item.title }}</h3>
-              <p class="description text-capitalize" cdkDrag>
+          <div
+            class="tasks p-3"
+            cdkDropList
+            #todoList2="cdkDropList"
+            [cdkDropListData]="inProgress"
+            [cdkDropListConnectedTo]="[todoList1, todoList3]"
+            (cdkDropListDropped)="drop($event)"
+          >
+            @for (item of inProgress; track $index) {
+
+            <div class="task" cdkDrag>
+              <h3 class="text-capitalize">{{ item.title }}</h3>
+              <p class="description text-capitalize">
                 {{ item.description }}
               </p>
               <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li (click)="editNotes($index, item)">
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </li>
-                <li (click)="deleteNotes($index)">
+                <li (click)="deleteNotes($index, 'inProgress')">
                   <i class="fa-solid fa-trash-can"></i>
                 </li>
                 <li><i class="fa-solid fa-palette"></i></li>
               </ul>
-              }
             </div>
+            }
           </div>
         </div>
       </section>
@@ -110,34 +108,32 @@
           >
             <h2 class="m-0 text-capitalize">Done</h2>
             @if (notes.length > 0) {
-            <span id="doneCounter">0</span>
+            <span id="doneCounter">{{ doneCount }}</span>
             }
           </div>
-          <div class="tasks p-3">
-            <div
-              class="task"
-              cdkDropList
-              #todoList3="cdkDropList"
-              [cdkDropListData]="done"
-              [cdkDropListConnectedTo]="[todoList1, todoList2]"
-              (cdkDropListDropped)="drop($event)"
-            >
-              @for (item of done(); track $index) {
-              <h3 class="text-capitalize" cdkDrag>{{ item.title }}</h3>
-              <p class="description text-capitalize" cdkDrag>
+          <div
+            class="tasks p-3"
+            cdkDropList
+            #todoList3="cdkDropList"
+            [cdkDropListData]="done"
+            [cdkDropListConnectedTo]="[todoList1, todoList2]"
+            (cdkDropListDropped)="drop($event)"
+          >
+            @for (item of done; track $index) {
+
+            <div class="task" cdkDrag>
+              <h3 class="text-capitalize">{{ item.title }}</h3>
+              <p class="description text-capitalize">
                 {{ item.description }}
               </p>
               <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li (click)="editNotes($index, item)">
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </li>
-                <li (click)="deleteNotes($index)">
+                <li (click)="deleteNotes($index, 'done')">
                   <i class="fa-solid fa-trash-can"></i>
                 </li>
                 <li><i class="fa-solid fa-palette"></i></li>
               </ul>
-              }
             </div>
+            }
           </div>
         </div>
       </section>
@@ -146,4 +142,8 @@
 </main>
 
 <!-- Modal -->
-<app-modal [isVisible]="modalVisible()" (onClose)="closeModal()"></app-modal>
+<app-modal
+  [isVisible]="showModal"
+  (onClose)="closeModal()"
+  (noteAdded)="addNewNote($event)"
+></app-modal>

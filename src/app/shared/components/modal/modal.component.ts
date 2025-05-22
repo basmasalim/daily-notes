@@ -5,6 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { NotesData } from '../../../core/interfaces/notes-data';
 
 @Component({
   selector: 'app-modal',
@@ -15,7 +16,7 @@ import {
 export class ModalComponent implements OnInit {
   @Input() isVisible: boolean = false;
   @Output() onClose = new EventEmitter<void>();
-
+  @Output() noteAdded = new EventEmitter<NotesData>();
   modalForm!: FormGroup;
   isEditEnabled = signal(false);
 
@@ -37,9 +38,23 @@ export class ModalComponent implements OnInit {
   }
 
   addNote() {
-    console.log('addNote');
+    if (this.modalForm.valid) {
+      const newNote: NotesData = {
+        title: this.modalForm.value.title,
+        description: this.modalForm.value.description,
+      };
+      const existingNotes: any[] = JSON.parse(localStorage.getItem('notes') || '[]');
+      existingNotes.push(newNote);
+      localStorage.setItem('notes', JSON.stringify(existingNotes));
+
+      this.noteAdded.emit(newNote);
+      this.modalForm.reset();
+    }
+    this.onClose.emit();
   }
-  updateNote() { }
+  updateNote() {
+
+  }
 
   handleOverlayClick() {
     this.onClose.emit();

@@ -28,7 +28,9 @@
           class="form-control"
           id="description"
           placeholder="Note Description"
+          formControlName="description"
         ></textarea>
+
         <label for="description">Note Description</label>
       </div>
 
@@ -42,7 +44,7 @@
       @if (!isEditEnabled()) {
       <button
         [disabled]="modalForm.invalid"
-        class="btn d-block btn-new-Note w-100 fw-semibold"
+        class="btn d-block btn-new-task w-100 fw-semibold"
         id="addBtn"
         (click)="addNote()"
       >

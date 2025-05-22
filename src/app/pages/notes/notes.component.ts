@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import {
   CdkDragDrop,
@@ -15,55 +15,85 @@ import { NotesData } from '../../core/interfaces/notes-data';
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css',
 })
-export class NotesComponent {
-  modalVisible = signal(false);
-  notes = signal<NotesData[]>([]);
-  inProgress = signal<NotesData[]>([]);
-  done = signal<NotesData[]>([]);
+export class NotesComponent implements OnInit {
+  showModal: boolean = false;
+  notesCount: number = 0;
+  inProgressCount: number = 0;
+  doneCount: number = 0;
 
-  deleteNotes(noteId: number) {
-    this.notes.set([]);
-    this.inProgress.set([]);
-    this.done.set([]);
-  }
+  notes: NotesData[] = [];
+  inProgress: NotesData[] = [];
+  done: NotesData[] = [];
 
-  editNotes(noteId: number, note: NotesData) {
-    // this.notes.update((notes) => {
-    //   const index = notes.findIndex((note) => note._id === noteId);
-    //   notes[index] = note;
-    //   return notes;
-    // });
-  }
-
-  drop(event: CdkDragDrop<WritableSignal<NotesData[]>>) {
-    const prevData = event.previousContainer.data();
-    const currData = event.container.data();
-
-    if (event.previousContainer === event.container) {
-      const updated = [...currData];
-      moveItemInArray(updated, event.previousIndex, event.currentIndex);
-      event.container.data.set(updated);
-    } else {
-      const prevUpdated = [...prevData];
-      const currUpdated = [...currData];
-
-      transferArrayItem(
-        prevUpdated,
-        currUpdated,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      event.previousContainer.data.set(prevUpdated);
-      event.container.data.set(currUpdated);
+  ngOnInit() {
+    if (typeof window !== 'undefined' && localStorage) {
+      const saved = localStorage.getItem('kanban');
+      if (saved) {
+        const data = JSON.parse(saved);
+        this.notes = data.notes || [];
+        this.inProgress = data.inProgress || [];
+        this.done = data.done || [];
+      }
     }
   }
 
+
+  ngOnChanges() {
+    this.saveToLocalStorage();
+  }
+
+  saveToLocalStorage() {
+    if (typeof window !== 'undefined' && localStorage) {
+      localStorage.setItem('kanban', JSON.stringify({
+        notes: this.notes,
+        inProgress: this.inProgress,
+        done: this.done
+      }));
+    }
+  }
+
+
+
+  deleteNotes(noteIndex: number, arrayType: 'notes' | 'inProgress' | 'done') {
+    this[arrayType].splice(noteIndex, 1);
+  }
+
+  editNotes(noteId: number, note: NotesData) {
+  }
+
+  addNewNote(note: NotesData) {
+    this.notes.push(note);
+    this.saveToLocalStorage();
+  }
+
+
+  drop(event: CdkDragDrop<NotesData[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+    this.saveToLocalStorage();
+    this.updateCounters();
+  }
+
+  updateCounters() {
+    this.notesCount = this.notes.length;
+    this.inProgressCount = this.inProgress.length;
+    this.doneCount = this.done.length;
+  }
+
+
   openModal() {
-    this.modalVisible.set(true);
+    this.showModal = true;
   }
 
   closeModal() {
-    this.modalVisible.set(false);
+    this.showModal = false;
   }
 }
