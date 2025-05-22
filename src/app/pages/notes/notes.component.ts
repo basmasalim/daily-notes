@@ -8,6 +8,7 @@ import {
   CdkDropList,
 } from '@angular/cdk/drag-drop';
 import { NotesData } from '../../core/interfaces/notes-data';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-notes',
@@ -52,30 +53,39 @@ export class NotesComponent implements OnInit {
 
 
   addNewNote(note: NotesData) {
-    note._id = Date.now(); // أو استخدم UUID لو حبيت
+    note._id = Date.now();
     this.notes.push(note);
     this.syncState();
   }
 
 
   deleteNotes(noteIndex: number, arrayType: 'notes' | 'inProgress' | 'done') {
-    this[arrayType].splice(noteIndex, 1);
-    this.syncState()
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        }).then(() => {
+          this[arrayType].splice(noteIndex, 1);
+          this.syncState()
+        });
+      }
+    });
   }
+
   updateNote(task: NotesData, taskId: number) {
     this.noteBeingEdited = { ...task, _id: taskId };
     this.showModal = true;
   }
-
-
-
-
-  syncState() {
-    this.saveToLocalStorage();
-    this.updateCounters();
-  }
-
-
   handleNoteUpdate(updatedNote: NotesData) {
     const lists = [this.notes, this.inProgress, this.done];
 
@@ -91,10 +101,16 @@ export class NotesComponent implements OnInit {
     this.closeModal();
   }
 
+  syncState() {
+    this.saveToLocalStorage();
+    this.updateCounters();
+  }
 
-
-
-
+  updateCounters() {
+    this.notesCount = this.notes.length;
+    this.inProgressCount = this.inProgress.length;
+    this.doneCount = this.done.length;
+  }
 
   drop(event: CdkDragDrop<NotesData[]>) {
     if (event.previousContainer === event.container) {
@@ -108,16 +124,7 @@ export class NotesComponent implements OnInit {
       );
     }
     this.syncState()
-
   }
-
-  updateCounters() {
-    this.notesCount = this.notes.length;
-    this.inProgressCount = this.inProgress.length;
-    this.doneCount = this.done.length;
-  }
-
-
   openModal() {
     this.showModal = true;
   }
