@@ -1,5 +1,5 @@
 export interface NotesData {
-  _id?: string;
+  _id?: any;
   title: string;
   description?: string;
   completed?: boolean;

@@ -20,6 +20,8 @@ export class NotesComponent implements OnInit {
   notesCount: number = 0;
   inProgressCount: number = 0;
   doneCount: number = 0;
+  noteBeingEdited: NotesData | null = null;
+
 
   notes: NotesData[] = [];
   inProgress: NotesData[] = [];
@@ -37,11 +39,6 @@ export class NotesComponent implements OnInit {
     }
   }
 
-
-  ngOnChanges() {
-    this.saveToLocalStorage();
-  }
-
   saveToLocalStorage() {
     if (typeof window !== 'undefined' && localStorage) {
       localStorage.setItem('kanban', JSON.stringify({
@@ -54,17 +51,49 @@ export class NotesComponent implements OnInit {
 
 
 
+  addNewNote(note: NotesData) {
+    note._id = Date.now(); // أو استخدم UUID لو حبيت
+    this.notes.push(note);
+    this.syncState();
+  }
+
+
   deleteNotes(noteIndex: number, arrayType: 'notes' | 'inProgress' | 'done') {
     this[arrayType].splice(noteIndex, 1);
+    this.syncState()
+  }
+  updateNote(task: NotesData, taskId: number) {
+    this.noteBeingEdited = { ...task, _id: taskId };
+    this.showModal = true;
   }
 
-  editNotes(noteId: number, note: NotesData) {
-  }
 
-  addNewNote(note: NotesData) {
-    this.notes.push(note);
+
+
+  syncState() {
     this.saveToLocalStorage();
+    this.updateCounters();
   }
+
+
+  handleNoteUpdate(updatedNote: NotesData) {
+    const lists = [this.notes, this.inProgress, this.done];
+
+    for (let list of lists) {
+      const index = list.findIndex(task => task._id === updatedNote._id);
+      if (index !== -1) {
+        list[index] = { ...updatedNote };
+        break;
+      }
+    }
+
+    this.syncState();
+    this.closeModal();
+  }
+
+
+
+
 
 
   drop(event: CdkDragDrop<NotesData[]>) {
@@ -78,8 +107,8 @@ export class NotesComponent implements OnInit {
         event.currentIndex,
       );
     }
-    this.saveToLocalStorage();
-    this.updateCounters();
+    this.syncState()
+
   }
 
   updateCounters() {
@@ -95,5 +124,7 @@ export class NotesComponent implements OnInit {
 
   closeModal() {
     this.showModal = false;
+    this.noteBeingEdited = null;
   }
+
 }

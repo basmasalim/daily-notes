@@ -50,7 +50,7 @@
                 {{ item.description }}
               </p>
               <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li (click)="editNotes($index, item)">
+                <li (click)="updateNote(item, item._id)">
                   <i class="fa-regular fa-pen-to-square"></i>
                 </li>
                 <li (click)="deleteNotes($index, 'notes')">
@@ -144,6 +144,8 @@
 <!-- Modal -->
 <app-modal
   [isVisible]="showModal"
+  [noteToEdit]="noteBeingEdited"
   (onClose)="closeModal()"
   (noteAdded)="addNewNote($event)"
+  (noteUpdated)="handleNoteUpdate($event)"
 ></app-modal>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,10 +13,12 @@ import { NotesData } from '../../../core/interfaces/notes-data';
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css',
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements OnInit, OnChanges {
   @Input() isVisible: boolean = false;
   @Output() onClose = new EventEmitter<void>();
   @Output() noteAdded = new EventEmitter<NotesData>();
+  @Input() noteToEdit?: NotesData | null = null;
+  @Output() noteUpdated = new EventEmitter<NotesData>();
   modalForm!: FormGroup;
   isEditEnabled = signal(false);
 
@@ -24,7 +26,23 @@ export class ModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    if (this.noteToEdit) {
+      this.modalForm.patchValue(this.noteToEdit);
+    }
   }
+
+  ngOnChanges(changes: any): void {
+    if (changes['noteToEdit'] && this.noteToEdit) {
+      this.modalForm.patchValue({
+        title: this.noteToEdit.title,
+        description: this.noteToEdit.description,
+      });
+    } else if (changes['noteToEdit'] && !this.noteToEdit && this.modalForm) {
+      this.modalForm.reset();
+    }
+  }
+
+
 
   initForm(): void {
     this.modalForm = this.formBuilder.group({
@@ -34,8 +52,24 @@ export class ModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.modalForm.value);
+    if (this.modalForm.invalid) return;
+
+    const note: NotesData = {
+      _id: this.noteToEdit?._id || Date.now().toString(),
+      ...this.modalForm.value
+    };
+
+
+    if (this.noteToEdit) {
+      this.noteUpdated.emit(note);
+    } else {
+      this.noteAdded.emit(note);
+    }
+
+    this.modalForm.reset();
   }
+
+
 
   addNote() {
     if (this.modalForm.valid) {
@@ -53,8 +87,19 @@ export class ModalComponent implements OnInit {
     this.onClose.emit();
   }
   updateNote() {
+    if (this.modalForm.valid && this.noteToEdit) {
+      const updatedNote: NotesData = {
+        ...this.noteToEdit,
+        title: this.modalForm.value.title,
+        description: this.modalForm.value.description,
+      };
 
+      this.noteUpdated.emit(updatedNote);
+      this.modalForm.reset();
+      this.onClose.emit();
+    }
   }
+
 
   handleOverlayClick() {
     this.onClose.emit();
