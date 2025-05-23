@@ -143,17 +143,9 @@ export class NotesComponent implements OnInit {
     return color;
   }
 
-  changeTaskBackground(index: number) {
+  changeTaskBackground(index: number, listType: 'notes' | 'inProgress' | 'done') {
     const color = this.generateRandomColor();
-
-    if (this.notes[index]) {
-      this.notes[index].bgColor = color;
-    } else if (this.inProgress[index]) {
-      this.inProgress[index].bgColor = color;
-    } else if (this.done[index]) {
-      this.done[index].bgColor = color;
-    }
-
+    this[listType][index].bgColor = color;
     this.syncState();
   }
 
