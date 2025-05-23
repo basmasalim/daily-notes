@@ -1,12 +1,13 @@
 # 📝 Daily Notes — Angular19
 
-Welcome to **Daily Notes**, your simple and elegant Kanban-style task manager built with Angular, Drag & Drop support, and localStorage persistence.
+Welcome to **Daily Notes**, your simple and elegant ClickUp-style task manager built with Angular, Drag & Drop support, and localStorage persistence.
 
+![image](https://github.com/user-attachments/assets/600aff1d-bd7c-4fca-9dda-0f399df976d7)
 
 
 ## 🔗 Live Demo
 
-👉 [Open on Vercel](https://daily-notes-one.vercel.app/notes)
+[Live Demo](https://daily-notes-one.vercel.app/notes)
 
 ---
 
