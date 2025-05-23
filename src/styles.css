@@ -13,10 +13,13 @@
 }
 
 body {
-  min-height: 100vh;
   font-family: "Lobster", cursive;
-  background-color: var(--main-black);
   color: var(--text-color);
+}
+
+main {
+  min-height: 100vh;
+  background-color: var(--main-black);
 }
 
 a {

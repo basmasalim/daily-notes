@@ -10,9 +10,10 @@ import {
 import { NotesData } from '../../core/interfaces/notes-data';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
 @Component({
   selector: 'app-notes',
-  imports: [ModalComponent, CdkDropList, CdkDrag, FormsModule],
+  imports: [ModalComponent, CdkDropList, CdkDrag, FormsModule, NavbarComponent],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css',
 })
