@@ -11,16 +11,16 @@
         <input
           type="text"
           class="form-control w-50"
-          placeholder="Seach Tasks...."
+          placeholder="Seach Tasks By Title...."
           aria-label="search"
           aria-describedby="addon-wrapping"
           id="searchInput"
           list="categories"
+          [(ngModel)]="searchInput"
         />
       </div>
     </div>
   </nav>
-
   <button
     id="newTask"
     class="btn btn-new-task mx-auto d-flex align-items-center mb-5 fw-semibold"
@@ -49,7 +49,7 @@
             [cdkDropListConnectedTo]="[todoList2, todoList3]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of notes; track $index) {
+            @for (item of notes | search: searchInput; track $index) {
             <div class="task" cdkDrag>
               <h3 class="text-capitalize">{{ item.title }}</h3>
               <p class="description text-capitalize">
@@ -88,7 +88,7 @@
             [cdkDropListConnectedTo]="[todoList1, todoList3]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of inProgress; track $index) {
+            @for (item of inProgress | search: searchInput; track $index) {
 
             <div class="task" cdkDrag>
               <h3 class="text-capitalize">{{ item.title }}</h3>
@@ -125,7 +125,7 @@
             [cdkDropListConnectedTo]="[todoList1, todoList2]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of done; track $index) {
+            @for (item of done | search: searchInput; track $index) {
 
             <div class="task" cdkDrag>
               <h3 class="text-capitalize">{{ item.title }}</h3>

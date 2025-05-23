@@ -9,10 +9,12 @@ import {
 } from '@angular/cdk/drag-drop';
 import { NotesData } from '../../core/interfaces/notes-data';
 import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
+import { SearchPipe } from "../../core/pipes/search.pipe";
 
 @Component({
   selector: 'app-notes',
-  imports: [ModalComponent, CdkDropList, CdkDrag],
+  imports: [ModalComponent, CdkDropList, CdkDrag, FormsModule, SearchPipe],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css',
 })
@@ -22,7 +24,7 @@ export class NotesComponent implements OnInit {
   inProgressCount: number = 0;
   doneCount: number = 0;
   noteBeingEdited: NotesData | null = null;
-
+  searchInput: string = '';
 
   notes: NotesData[] = [];
   inProgress: NotesData[] = [];
