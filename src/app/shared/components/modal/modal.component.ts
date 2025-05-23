@@ -6,10 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { NotesData } from '../../../core/interfaces/notes-data';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-modal',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css',
 })
@@ -42,12 +43,10 @@ export class ModalComponent implements OnInit, OnChanges {
     }
   }
 
-
-
   initForm(): void {
     this.modalForm = this.formBuilder.group({
-      title: ['', Validators.required],
-      description: '',
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', Validators.maxLength(100)],
     });
   }
 

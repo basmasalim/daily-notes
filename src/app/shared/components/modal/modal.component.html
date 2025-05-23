@@ -6,37 +6,40 @@
 >
   <div class="container" (click)="$event.stopPropagation()">
     <form [formGroup]="modalForm">
-      @let titleForm = modalForm.get('title');
       <div class="form-floating mb-3">
+        @let titleForm = modalForm.get('title');
         <input
           type="text"
           class="form-control"
           id="title"
           placeholder="Note Title"
           formControlName="title"
+          [ngClass]="{
+            'is-invalid':
+              titleForm?.errors && (titleForm?.touched || titleForm?.dirty),
+            'is-valid':
+              !titleForm?.errors && !(titleForm?.touched || titleForm?.dirty)
+          }"
         />
         <label for="title">Note Title</label>
       </div>
-      @if (titleForm?.errors && titleForm?.touched) {
-      <p class="alert alert-danger d-none">
-        Note Title must be at least 3 characters & not ending with a space
-      </p>
-      }
 
       <div class="form-floating mb-3">
+        @let descriptionForm = modalForm.get('description');
         <textarea
           class="form-control"
           id="description"
           placeholder="Note Description"
           formControlName="description"
+          [ngClass]="{
+            'is-invalid':
+              descriptionForm?.errors &&
+              (descriptionForm?.touched || descriptionForm?.dirty),
+          }"
         ></textarea>
 
         <label for="description">Note Description</label>
       </div>
-
-      <p class="alert alert-danger d-none">
-        Description must contain between 5 and 100 characters
-      </p>
 
       <p class="text-end">
         <span id="remainingCounter">100</span> remaining character

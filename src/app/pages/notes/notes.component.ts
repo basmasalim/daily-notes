@@ -117,6 +117,22 @@ export class NotesComponent implements OnInit {
     this.inProgressCount = this.inProgress.length;
     this.doneCount = this.done.length;
   }
+
+
+  // & ========================= Search ============================
+
+  get filteredNotes() {
+    return this.notes.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
+  }
+
+  get filteredInProgress() {
+    return this.inProgress.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
+  }
+
+  get filteredDone() {
+    return this.done.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
+  }
+
   // * ========================= Change Task Background ============================
   generateRandomColor(): string {
     let color = '#';
@@ -171,18 +187,5 @@ export class NotesComponent implements OnInit {
     this.showModal = false;
     this.noteBeingEdited = null;
   }
-
-  get filteredNotes() {
-    return this.notes.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
-  }
-
-  get filteredInProgress() {
-    return this.inProgress.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
-  }
-
-  get filteredDone() {
-    return this.done.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
-  }
-
 
 }
