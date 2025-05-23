@@ -49,22 +49,34 @@
             [cdkDropListConnectedTo]="[todoList2, todoList3]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of notes | search: searchInput; track $index) {
-            <div class="task" cdkDrag>
-              <h3 class="text-capitalize">{{ item.title }}</h3>
-              <p class="description text-capitalize">
-                {{ item.description }}
-              </p>
-              <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li (click)="updateNote(item, item._id)">
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </li>
-                <li (click)="deleteNotes($index, 'notes')">
-                  <i class="fa-solid fa-trash-can"></i>
-                </li>
-                <li><i class="fa-solid fa-palette"></i></li>
-              </ul>
-            </div>
+            @for (item of filteredNotes; track $index) {
+            <ng-container>
+              <div
+                class="task"
+                cdkDrag
+                [style.background-color]="item.bgColor || 'transparent'"
+              >
+                <h3 class="text-capitalize">{{ item.title }}</h3>
+                <p class="description text-capitalize">
+                  {{ item.description }}
+                </p>
+                <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
+                  <li (click)="updateNote(item, item._id)">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </li>
+                  <li (click)="deleteNotes($index, 'notes')">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </li>
+                  <li>
+                    <i
+                      class="fa-solid fa-palette"
+                      (click)="changeTaskBackground($index)"
+                    ></i>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+
             }
           </div>
         </div>
@@ -88,20 +100,31 @@
             [cdkDropListConnectedTo]="[todoList1, todoList3]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of inProgress | search: searchInput; track $index) {
+            @for (item of filteredInProgress; track $index) {
+            <ng-container>
+              <div
+                class="task"
+                cdkDrag
+                [style.background-color]="item.bgColor || 'transparent'"
+              >
+                <h3 class="text-capitalize">{{ item.title }}</h3>
+                <p class="description text-capitalize">
+                  {{ item.description }}
+                </p>
+                <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
+                  <li (click)="deleteNotes($index, 'inProgress')">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </li>
+                  <li>
+                    <i
+                      class="fa-solid fa-palette"
+                      (click)="changeTaskBackground($index)"
+                    ></i>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
 
-            <div class="task" cdkDrag>
-              <h3 class="text-capitalize">{{ item.title }}</h3>
-              <p class="description text-capitalize">
-                {{ item.description }}
-              </p>
-              <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li (click)="deleteNotes($index, 'inProgress')">
-                  <i class="fa-solid fa-trash-can"></i>
-                </li>
-                <li><i class="fa-solid fa-palette"></i></li>
-              </ul>
-            </div>
             }
           </div>
         </div>
@@ -125,20 +148,31 @@
             [cdkDropListConnectedTo]="[todoList1, todoList2]"
             (cdkDropListDropped)="drop($event)"
           >
-            @for (item of done | search: searchInput; track $index) {
+            @for (item of filteredDone; track $index) {
+            <ng-container>
+              <div
+                class="task"
+                cdkDrag
+                [style.background-color]="item.bgColor || 'transparent'"
+              >
+                <h3 class="text-capitalize">{{ item.title }}</h3>
+                <p class="description text-capitalize">
+                  {{ item.description }}
+                </p>
+                <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
+                  <li (click)="deleteNotes($index, 'done')">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </li>
+                  <li>
+                    <i
+                      class="fa-solid fa-palette"
+                      (click)="changeTaskBackground($index)"
+                    ></i>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
 
-            <div class="task" cdkDrag>
-              <h3 class="text-capitalize">{{ item.title }}</h3>
-              <p class="description text-capitalize">
-                {{ item.description }}
-              </p>
-              <ul class="task-options list-unstyled d-flex gap-3 fs-5 m-0">
-                <li (click)="deleteNotes($index, 'done')">
-                  <i class="fa-solid fa-trash-can"></i>
-                </li>
-                <li><i class="fa-solid fa-palette"></i></li>
-              </ul>
-            </div>
             }
           </div>
         </div>

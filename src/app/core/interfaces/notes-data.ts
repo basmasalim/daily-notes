@@ -3,4 +3,5 @@ export interface NotesData {
   title: string;
   description?: string;
   completed?: boolean;
+  bgColor?: string;
 }

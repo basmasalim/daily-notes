@@ -10,11 +10,9 @@ import {
 import { NotesData } from '../../core/interfaces/notes-data';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
-import { SearchPipe } from "../../core/pipes/search.pipe";
-
 @Component({
   selector: 'app-notes',
-  imports: [ModalComponent, CdkDropList, CdkDrag, FormsModule, SearchPipe],
+  imports: [ModalComponent, CdkDropList, CdkDrag, FormsModule],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css',
 })
@@ -43,41 +41,47 @@ export class NotesComponent implements OnInit {
     this.syncState();
   }
 
+  // & ========================= Local Storage ============================
   saveToLocalStorage() {
     if (typeof window !== 'undefined' && localStorage) {
-      localStorage.setItem('kanban', JSON.stringify({
-        notes: this.notes,
-        inProgress: this.inProgress,
-        done: this.done
-      }));
+      localStorage.setItem(
+        'kanban',
+        JSON.stringify({
+          notes: this.notes,
+          inProgress: this.inProgress,
+          done: this.done,
+        })
+      );
     }
   }
+  // ^ ========================= CRUD Operations ============================
 
   addNewNote(note: NotesData) {
     note._id = Date.now();
     this.notes.push(note);
     this.syncState();
+    this.ngOnInit()
   }
-
 
   deleteNotes(noteIndex: number, arrayType: 'notes' | 'inProgress' | 'done') {
     Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success"
+          title: 'Deleted!',
+          text: 'Your file has been deleted.',
+          icon: 'success',
         }).then(() => {
           this[arrayType].splice(noteIndex, 1);
-          this.syncState()
+          this.syncState();
+          this.ngOnInit();
         });
       }
     });
@@ -92,7 +96,7 @@ export class NotesComponent implements OnInit {
     const lists = [this.notes, this.inProgress, this.done];
 
     for (let list of lists) {
-      const index = list.findIndex(task => task._id === updatedNote._id);
+      const index = list.findIndex((task) => task._id === updatedNote._id);
       if (index !== -1) {
         list[index] = { ...updatedNote };
         break;
@@ -113,20 +117,52 @@ export class NotesComponent implements OnInit {
     this.inProgressCount = this.inProgress.length;
     this.doneCount = this.done.length;
   }
+  // * ========================= Change Task Background ============================
+  generateRandomColor(): string {
+    let color = '#';
+    const hexCharsArr = '0123456789abcdef';
+    for (let i = 0; i < 6; i++) {
+      color += hexCharsArr[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
+  changeTaskBackground(index: number) {
+    const color = this.generateRandomColor();
+
+    if (this.notes[index]) {
+      this.notes[index].bgColor = color;
+    } else if (this.inProgress[index]) {
+      this.inProgress[index].bgColor = color;
+    } else if (this.done[index]) {
+      this.done[index].bgColor = color;
+    }
+
+    this.syncState();
+  }
+
+
+
+  // & ========================= Drop and Drag ============================
   drop(event: CdkDragDrop<NotesData[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     } else {
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
-        event.currentIndex,
+        event.currentIndex
       );
     }
     this.syncState();
   }
+
+  // ? ========================= MOdal ============================
   openModal() {
     this.showModal = true;
   }
@@ -135,5 +171,18 @@ export class NotesComponent implements OnInit {
     this.showModal = false;
     this.noteBeingEdited = null;
   }
+
+  get filteredNotes() {
+    return this.notes.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
+  }
+
+  get filteredInProgress() {
+    return this.inProgress.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
+  }
+
+  get filteredDone() {
+    return this.done.filter(note => note.title.toLowerCase().includes(this.searchInput?.toLowerCase()));
+  }
+
 
 }
